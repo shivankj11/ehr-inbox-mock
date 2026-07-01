@@ -54,7 +54,10 @@ function saveInbound(arr) {
 MESSAGES.push(...loadInbound());
 (function applyOverrides() {
   const o = loadOverrides();
-  MESSAGES.forEach((m) => { if (o[m.id]) m.folder = o[m.id]; });
+  MESSAGES.forEach((m) => {
+    if (m.homeFolder === undefined) m.homeFolder = m.folder; // natural folder before any move
+    if (o[m.id] !== undefined) m.folder = o[m.id];
+  });
 })();
 
 // ---- state ----
@@ -66,12 +69,18 @@ const els = {
   count: document.querySelector('.msglist__count'),
   empty: document.getElementById('readerEmpty'),
   content: document.getElementById('readerContent'),
-  subject: document.getElementById('rSubject'),
+  // behaviors column (message header + actions)
+  actionsDetail: document.getElementById('actionsDetail'),
+  actionsEmpty: document.getElementById('actionsEmpty'),
+  actions: document.getElementById('rActions'),
+  title: document.getElementById('rTitle'),
   from: document.getElementById('rFrom'),
   time: document.getElementById('rTime'),
-  source: document.getElementById('rSource'),
+  // body column
+  subject: document.getElementById('rSubject'),
+  fromBody: document.getElementById('rFromBody'),
+  timeBody: document.getElementById('rTimeBody'),
   body: document.getElementById('rBody'),
-  actions: document.getElementById('rActions'),
 };
 
 // ---- render the message list for the active folder ----
@@ -103,52 +112,101 @@ function renderList() {
   });
 }
 
-// ---- open a message into the reading pane ----
+// ---- reset the detail + actions panes to their empty state ----
+function showEmptyReader() {
+  activeId = null;
+  els.content.hidden = true;
+  els.empty.hidden = false;
+  els.actionsDetail.hidden = true;
+  els.actionsEmpty.hidden = false;
+  els.actions.innerHTML = '';
+}
+
+// ---- open a message into the behaviors rail + body ----
 function openMessage(id) {
   const m = MESSAGES.find((x) => x.id === id);
   if (!m) return;
   activeId = id;
 
-  els.subject.textContent = m.subject;
-  els.from.textContent = m.from;
+  // behaviors column header
+  els.title.textContent = m.from;             // centered name
+  els.from.textContent = m.source || m.from;  // FROM = origin/source line
   els.time.textContent = m.time;
-  els.source.textContent = m.source;
+  // body column
+  els.subject.textContent = m.subject;
+  els.fromBody.textContent = m.source || m.from;
+  els.timeBody.textContent = m.time;
   els.body.textContent = m.body;
-  renderActions(m);
 
+  renderActions(m);
+  els.actionsDetail.hidden = false;
+  els.actionsEmpty.hidden = true;
   els.empty.hidden = true;
   els.content.hidden = false;
   renderList(); // refresh active-row highlight
 }
 
-// ---- action buttons depend on where the message currently lives ----
+// ---- action menu: resolved messages get Reactivate; active ones get Done/Complete/Reject ----
+const TERMINAL_FOLDERS = ['Completed Work', 'Sent Messages'];
+
+function reactivateTarget(m) {
+  const home = m.homeFolder;
+  return home && !TERMINAL_FOLDERS.includes(home) ? home : 'My Requests';
+}
+
 function renderActions(m) {
   els.actions.innerHTML = '';
-  const btn = document.createElement('button');
-  if (m.folder !== 'Completed Work') {
-    btn.className = 'btn btn--primary';
-    btn.textContent = '✓ Send to Completed Work';
-    btn.addEventListener('click', () => moveMessage(m.id, 'Completed Work'));
-  } else {
-    btn.className = 'btn btn--ghost';
-    btn.textContent = '↩ Reopen (move to My Requests)';
-    btn.addEventListener('click', () => moveMessage(m.id, 'My Requests'));
-  }
-  els.actions.appendChild(btn);
+  const common = [
+    { icon: '↩', label: 'Reply' },   // inert for now
+    { icon: '↪', label: 'Forward' }, // inert for now
+    { icon: '⚑', label: 'Flag', fn: () => toggleFlag(m.id) },
+  ];
+  const groups = TERMINAL_FOLDERS.includes(m.folder)
+    ? [[
+        ...common,
+        { icon: '↻', label: 'Reactivate', strong: true,
+          fn: () => moveMessage(m.id, reactivateTarget(m), 'Reactivated') },
+      ]]
+    : [
+        [...common, { icon: '✓', label: 'Done', fn: () => moveMessage(m.id, 'Completed Work', 'Marked done') }],
+        [
+          { icon: '✓', label: 'Complete', fn: () => moveMessage(m.id, 'Completed Work', 'Completed') },
+          { icon: '✕', label: 'Reject', fn: () => moveMessage(m.id, 'Completed Work', 'Rejected') },
+        ],
+      ];
+  groups.forEach((group) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'actions-pane__group';
+    group.forEach((a) => {
+      const btn = document.createElement('button');
+      btn.className = 'actions-pane__action' + (a.strong ? ' actions-pane__action--strong' : '');
+      btn.innerHTML = `<span class="actions-pane__action-icon">${a.icon}</span><span>${a.label}</span>`;
+      if (a.fn) btn.addEventListener('click', a.fn);
+      wrap.appendChild(btn);
+    });
+    els.actions.appendChild(wrap);
+  });
+}
+
+// ---- toggle a message's flag (updates the list flag icon, keeps reader open) ----
+function toggleFlag(id) {
+  const m = MESSAGES.find((x) => x.id === id);
+  if (!m) return;
+  m.flagged = !m.flagged;
+  renderList();
+  toast(m.flagged ? 'Flagged' : 'Unflagged');
 }
 
 // ---- move a message between folders + persist ----
-function moveMessage(id, folder) {
+function moveMessage(id, folder, label) {
   const m = MESSAGES.find((x) => x.id === id);
   if (!m) return;
   m.folder = folder;
   saveOverride(id, folder);
 
-  activeId = null;
-  els.content.hidden = true;
-  els.empty.hidden = false;
+  showEmptyReader();
   renderList();
-  toast(`Moved “${m.from}” to ${folder}`);
+  toast(label ? `${label} — “${m.from}”` : `Moved “${m.from}” to ${folder}`);
 }
 
 // ---- tiny toast ----
@@ -166,9 +224,7 @@ document.querySelectorAll('.sidebar__item').forEach((f) => {
     document.querySelectorAll('.sidebar__item').forEach((x) => x.classList.remove('sidebar__item--active'));
     f.classList.add('sidebar__item--active');
     activeFolder = f.dataset.folder;
-    activeId = null;
-    els.content.hidden = true;
-    els.empty.hidden = false;
+    showEmptyReader();
     renderList();
   });
 });
@@ -184,11 +240,69 @@ tabs.forEach((t) => {
   });
 });
 
-// ---- "Refresh" does a full page reload → re-pulls the backfill from Supabase ----
+// ---- "Refresh" spins briefly (visible feedback), then full-reloads → re-pulls Supabase ----
 document.querySelectorAll('.msglist__action').forEach((b) => {
   if (/Refresh/.test(b.textContent)) {
-    b.addEventListener('click', () => location.reload());
+    b.addEventListener('click', () => {
+      b.classList.add('loading');
+      const glyph = b.querySelector('.refresh-glyph');
+      if (glyph) glyph.classList.add('spinning');
+      setTimeout(() => location.reload(), 450); // let the spin register before navigating away
+    });
   }
+});
+
+// ---- draggable panel dividers (resize sidebar / inbox / behaviors; body fills the rest) ----
+const workspace = document.querySelector('.workspace');
+const WIDTHS_KEY = 'ehrInboxWidths';
+const MIN_W = { '--w-sidebar': 150, '--w-list': 240, '--w-actions': 200 };
+const BODY_MIN = 320;
+
+(function restoreWidths() {
+  if (window.innerWidth < 1024) return; // ignore saved widths on small screens
+  try {
+    const saved = JSON.parse(localStorage.getItem(WIDTHS_KEY));
+    if (saved) Object.entries(saved).forEach(([k, v]) => { if (v) workspace.style.setProperty(k, v); });
+  } catch (_) { /* ignore */ }
+})();
+
+function saveWidths() {
+  const cs = getComputedStyle(workspace);
+  localStorage.setItem(WIDTHS_KEY, JSON.stringify({
+    '--w-sidebar': cs.getPropertyValue('--w-sidebar').trim(),
+    '--w-list': cs.getPropertyValue('--w-list').trim(),
+    '--w-actions': cs.getPropertyValue('--w-actions').trim(),
+  }));
+}
+
+document.querySelectorAll('.resizer').forEach((r) => {
+  r.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    const varName = r.dataset.var;
+    const panel = r.previousElementSibling;       // the panel this handle resizes
+    const reader = document.getElementById('reader');
+    const startX = e.clientX;
+    const startW = panel.getBoundingClientRect().width;
+    const min = MIN_W[varName] || 160;
+    const max = startW + Math.max(0, reader.getBoundingClientRect().width - BODY_MIN);
+
+    r.classList.add('dragging');
+    document.body.classList.add('col-resizing');
+
+    const onMove = (ev) => {
+      const w = Math.max(min, Math.min(max, startW + (ev.clientX - startX)));
+      workspace.style.setProperty(varName, w + 'px');
+    };
+    const onUp = () => {
+      r.classList.remove('dragging');
+      document.body.classList.remove('col-resizing');
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      saveWidths();
+    };
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+  });
 });
 
 renderList();
@@ -240,6 +354,7 @@ function receiveMessage(payload, opts = {}) {
     seenExt.add(opts.extId);
   }
   const subject = p.subject || p.title || p.message || 'New message';
+  const naturalFolder = p.folder || 'My Requests';
   const msg = {
     id: opts.extId != null ? 'ext-' + opts.extId : Date.now() + inboundSeq++,
     from: p.from || 'External Source',
@@ -247,10 +362,14 @@ function receiveMessage(payload, opts = {}) {
     preview: subject.length > 52 ? subject.slice(0, 52) + '…' : subject,
     source: p.source || 'API',
     time: p.time || fmtNow(),
-    folder: p.folder || 'My Requests',
+    homeFolder: naturalFolder,   // where Reactivate returns it
+    folder: naturalFolder,
     flagged: !!p.flagged,
     body: p.body || p.message || subject,
   };
+  // honor a saved folder move for this message across reloads (Supabase re-supplies history)
+  const ov = loadOverrides();
+  if (ov[msg.id] !== undefined) msg.folder = ov[msg.id];
   MESSAGES.push(msg);
   if (opts.persist !== false) {
     const inbound = loadInbound();

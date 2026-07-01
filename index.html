@@ -110,6 +110,8 @@
       </div>
     </aside>
 
+    <div class="resizer" data-var="--w-sidebar" role="separator" aria-orientation="vertical" title="Drag to resize"></div>
+
     <!-- Message list -->
     <section class="msglist" aria-label="Message list">
       <div class="msglist__header">
@@ -125,7 +127,35 @@
 
     </section>
 
-    <!-- Reading pane -->
+    <div class="resizer" data-var="--w-list" role="separator" aria-orientation="vertical" title="Drag to resize"></div>
+
+    <!-- Behaviors / actions rail (message header + actions, between inbox and body) -->
+    <section class="actions-pane" aria-label="Message actions">
+      <div class="actions-pane__empty" id="actionsEmpty">No message selected</div>
+      <div class="actions-pane__detail" id="actionsDetail" hidden>
+        <h2 class="actions-pane__name" id="rTitle"></h2>
+        <div class="actions-pane__field">
+          <div class="actions-pane__label">FROM</div>
+          <div class="actions-pane__value" id="rFrom"></div>
+        </div>
+        <div class="actions-pane__field">
+          <div class="actions-pane__label">DATE</div>
+          <div class="actions-pane__value" id="rTime"></div>
+        </div>
+        <div class="actions-pane__field">
+          <div class="actions-pane__label">READ</div>
+          <div class="actions-pane__value actions-pane__read">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Viewed
+          </div>
+        </div>
+        <div class="actions-pane__menu" id="rActions"></div>
+      </div>
+    </section>
+
+    <div class="resizer" data-var="--w-actions" role="separator" aria-orientation="vertical" title="Drag to resize"></div>
+
+    <!-- Reading pane (message body, fills the panel) -->
     <section class="reader" id="reader" aria-label="Reading pane">
       <div class="reader__empty" id="readerEmpty">
         <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#c9ccd1" stroke-width="1.2" aria-hidden="true">
@@ -135,18 +165,42 @@
         <p>Select a message to read it</p>
       </div>
 
-      <article class="reader__content" id="readerContent" hidden>
-        <header class="reader__head">
-          <h1 class="reader__subject" id="rSubject"></h1>
-          <div class="reader__metarow">
-            <span class="reader__from" id="rFrom"></span>
-            <span class="reader__time" id="rTime"></span>
+      <div class="reader__content" id="readerContent" hidden>
+        <nav class="reader__tabs" id="readerTabs">
+          <button class="reader__tab reader__tab--active" data-tab="Message">Message</button>
+          <button class="reader__tab" data-tab="Meds">Meds</button>
+          <button class="reader__tab" data-tab="Vitals">Vitals</button>
+          <button class="reader__tab" data-tab="Labs">Labs</button>
+          <button class="reader__tab" data-tab="SMART App">SMART App</button>
+        </nav>
+
+        <div class="reader__cards">
+          <div class="card">
+            <div class="card__head" id="rSubject"></div>
+            <div class="card__body">
+              <div class="card__meta">
+                <div class="card__metacol">
+                  <div class="card__label">FROM</div>
+                  <div id="rFromBody"></div>
+                </div>
+                <div class="card__metacol">
+                  <div class="card__label">DATE</div>
+                  <div id="rTimeBody"></div>
+                </div>
+              </div>
+              <div class="card__text" id="rBody"></div>
+            </div>
           </div>
-          <div class="reader__source" id="rSource"></div>
-        </header>
-        <div class="reader__body" id="rBody"></div>
-        <div class="reader__actions" id="rActions"></div>
-      </article>
+
+          <div class="card">
+            <div class="card__head">SMART Application</div>
+            <div class="card__body">
+              <div class="card__sub">Launch the integrated application for this patient context.</div>
+              <button class="card__cta" id="openSmart"><span class="card__cta-icon">⚙</span> Open SMART App</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
