@@ -184,9 +184,11 @@ tabs.forEach((t) => {
   });
 });
 
-// ---- "Refresh" re-renders the current folder ----
+// ---- "Refresh" does a full page reload → re-pulls the backfill from Supabase ----
 document.querySelectorAll('.msglist__action').forEach((b) => {
-  if (/Refresh/.test(b.textContent)) b.addEventListener('click', renderList);
+  if (/Refresh/.test(b.textContent)) {
+    b.addEventListener('click', () => location.reload());
+  }
 });
 
 renderList();
