@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART Application — Inbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <a class="logo" href="https://www.luminai.com/" aria-label="Luminai">
+        <svg class="logo__svg" viewBox="0 0 102 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.375 0C12.9748 0.000126355 13.5644 0.158285 14.084 0.458008L23.0371 5.6377C23.5571 5.93725 23.9895 6.36929 24.29 6.88867C24.5904 7.40786 24.7486 7.99693 24.749 8.59668C24.7448 9.19359 24.5852 9.77977 24.2852 10.2959C23.9849 10.812 23.5539 11.2401 23.0371 11.5391L22.2734 11.9814L23.0371 12.4238C23.5571 12.7233 23.9895 13.1554 24.29 13.6748C24.5904 14.194 24.7487 14.7831 24.749 15.3828C24.7525 15.9862 24.5954 16.5802 24.2949 17.1035C23.9944 17.6267 23.5599 18.0611 23.0371 18.3623L14.084 23.543C13.5644 23.843 12.9748 23.9999 12.375 24C11.7755 24 11.1857 23.8429 10.666 23.543L1.71191 18.3623C1.19207 18.0629 0.759407 17.6324 0.458984 17.1133C0.158561 16.594 0.000367531 16.0041 0 15.4043C0.000337541 14.8046 0.158797 14.2154 0.458984 13.6963C0.759437 13.177 1.19189 12.7448 1.71191 12.4453L2.47559 12.0029L1.71191 11.5605C1.19184 11.2598 0.759403 10.8277 0.458984 10.3076C0.158706 9.78748 0.000455926 9.19714 0 8.59668C0.000372061 7.99692 0.158673 7.40787 0.458984 6.88867C0.75947 6.36929 1.19182 5.93725 1.71191 5.6377L10.666 0.458008C11.1857 0.158324 11.7755 0 12.375 0ZM14.0361 16.7148C13.5168 17.0146 12.927 17.1718 12.3271 17.1719C11.7273 17.1718 11.1375 17.0145 10.6182 16.7148L3.41797 12.5605L2.55469 13.0869C2.49344 13.1204 2.44248 13.1703 2.40723 13.2305C2.37208 13.2906 2.35274 13.3591 2.35352 13.4287C2.35261 13.4985 2.37196 13.5686 2.40723 13.6289C2.42976 13.6673 2.45825 13.7022 2.49219 13.7305C2.51788 13.7572 2.54861 13.7792 2.58105 13.7979L11.335 18.8525C11.6445 19.0316 11.9958 19.126 12.3535 19.126C12.7115 19.1259 13.0634 19.0319 13.373 18.8525L22.126 13.7979C22.1859 13.7633 22.236 13.7133 22.2705 13.6533C22.3054 13.5933 22.3242 13.5253 22.3242 13.4561C22.3242 13.3868 22.3054 13.3189 22.2705 13.2588C22.2507 13.2247 22.2261 13.1936 22.1973 13.167C22.1692 13.1356 22.1363 13.1081 22.0996 13.0869L21.2354 12.5605L14.0361 16.7148ZM12.3535 1.10547C11.8075 1.10547 11.27 1.24899 10.7969 1.52148L2.58105 6.25977C2.51978 6.29397 2.46823 6.34386 2.43262 6.4043C2.42367 6.41958 2.41598 6.4359 2.40918 6.45215C2.38298 6.50673 2.36902 6.56706 2.37012 6.62793C2.36926 6.69751 2.38778 6.76605 2.42285 6.82617C2.45806 6.88632 2.50916 6.93626 2.57031 6.96973L11.3232 12.0244C11.6329 12.2038 11.9858 12.2979 12.3438 12.2979C12.7014 12.2977 13.0529 12.2035 13.3623 12.0244L22.1152 6.95996C22.1539 6.93877 22.1895 6.91064 22.2188 6.87793C22.2399 6.85598 22.258 6.83111 22.2734 6.80469C22.3091 6.74404 22.3291 6.67383 22.3291 6.60352C22.3289 6.53351 22.309 6.46463 22.2734 6.4043C22.2378 6.34407 22.1872 6.29391 22.126 6.25977L13.9092 1.52148C13.4362 1.24908 12.8998 1.1055 12.3535 1.10547ZM14.1494 4.92871C14.2281 4.94021 14.3053 4.96957 14.375 5.01367L15.1582 5.52148C15.252 5.58119 15.3305 5.66867 15.3848 5.77344C15.4392 5.87805 15.4677 5.99707 15.4678 6.11816C15.4678 6.23957 15.4394 6.36002 15.3848 6.46484C15.3306 6.56935 15.2517 6.65525 15.1582 6.71484L12.373 8.52539C12.3024 8.56966 12.2241 8.59789 12.1445 8.60938C12.1181 8.61317 12.0913 8.61621 12.0645 8.61621C12.0376 8.6162 12.0108 8.61319 11.9844 8.60938C11.9049 8.59789 11.8281 8.56959 11.7578 8.52539L8.97168 6.71484C8.87782 6.65529 8.79969 6.56929 8.74512 6.46484C8.6905 6.36002 8.66211 6.23957 8.66211 6.11816C8.6622 5.99702 8.69067 5.87807 8.74512 5.77344C8.79976 5.66872 8.87755 5.58117 8.97168 5.52148L9.75488 5.01367C9.82456 4.96961 9.90074 4.94022 9.97949 4.92871C10.0059 4.92485 10.0327 4.92383 10.0596 4.92383L10.1387 4.92871C10.2176 4.94017 10.2943 4.96938 10.3643 5.01367L11.7578 5.92188C11.8281 5.966 11.9049 5.9944 11.9844 6.00586C12.0108 6.00967 12.0376 6.01171 12.0645 6.01172C12.0913 6.01172 12.1181 6.00965 12.1445 6.00586C12.2242 5.99438 12.3023 5.96614 12.373 5.92188L13.7646 5.01367C13.8345 4.96942 13.9112 4.9402 13.9902 4.92871C14.0163 4.92493 14.0429 4.92386 14.0693 4.92383L14.1494 4.92871Z" fill="currentColor"></path><path d="M34.6 18V3.8H37.2V17.2L35.78 15.74H43.94V18H34.6ZM48.1942 18.24C47.1142 18.24 46.2542 17.8867 45.6142 17.18C44.9876 16.46 44.6742 15.4667 44.6742 14.2V7.32H47.2342V13.56C47.2342 14.4533 47.3809 15.1133 47.6742 15.54C47.9809 15.9533 48.4409 16.16 49.0542 16.16C49.7476 16.16 50.2809 15.9333 50.6542 15.48C51.0409 15.0133 51.2342 14.34 51.2342 13.46V7.32H53.7942V18H51.4542L51.3942 15.06L51.7142 15.16C51.5542 16.1733 51.1742 16.94 50.5742 17.46C49.9742 17.98 49.1809 18.24 48.1942 18.24ZM55.8078 18V7.32H58.1278L58.2078 9.94L57.9678 9.82C58.0878 9.24667 58.2945 8.76 58.5878 8.36C58.8945 7.94667 59.2611 7.63333 59.6878 7.42C60.1278 7.19333 60.6078 7.08 61.1278 7.08C62.0345 7.08 62.7678 7.34 63.3278 7.86C63.8878 8.36667 64.2411 9.06667 64.3878 9.96H64.0478C64.1678 9.33333 64.3745 8.81333 64.6678 8.4C64.9611 7.97333 65.3278 7.64667 65.7678 7.42C66.2211 7.19333 66.7278 7.08 67.2878 7.08C68.0211 7.08 68.6545 7.24 69.1878 7.56C69.7211 7.86667 70.1278 8.32 70.4078 8.92C70.7011 9.52 70.8478 10.26 70.8478 11.14V18H68.2878V11.8C68.2878 10.92 68.1345 10.26 67.8278 9.82C67.5345 9.38 67.0811 9.16 66.4678 9.16C66.0545 9.16 65.7011 9.26667 65.4078 9.48C65.1145 9.69333 64.8878 10.0067 64.7278 10.42C64.5811 10.82 64.5078 11.3067 64.5078 11.88V18H62.1278V11.88C62.1278 11 61.9945 10.3267 61.7278 9.86C61.4611 9.39333 61.0011 9.16 60.3478 9.16C59.9345 9.16 59.5811 9.26667 59.2878 9.48C59.0078 9.69333 58.7811 10.0067 58.6078 10.42C58.4478 10.82 58.3678 11.3067 58.3678 11.88V18H55.8078ZM72.6641 18V7.32H75.2241V18H72.6641ZM72.6241 5.9V3.62H75.2841V5.9H72.6241ZM77.3914 18V7.32H79.7114L79.8114 10.32L79.5114 10.2C79.6181 9.45333 79.8381 8.85333 80.1714 8.4C80.5047 7.94667 80.9114 7.61333 81.3914 7.4C81.8714 7.18667 82.3981 7.08 82.9714 7.08C83.7581 7.08 84.4181 7.25333 84.9514 7.6C85.4981 7.94667 85.9114 8.42667 86.1914 9.04C86.4714 9.64 86.6114 10.34 86.6114 11.14V18H84.0514V11.96C84.0514 11.36 83.9914 10.8533 83.8714 10.44C83.7514 10.0267 83.5514 9.71333 83.2714 9.5C83.0047 9.27333 82.6447 9.16 82.1914 9.16C81.5114 9.16 80.9647 9.4 80.5514 9.88C80.1514 10.36 79.9514 11.0533 79.9514 11.96V18H77.3914ZM91.4688 18.24C90.3488 18.24 89.4488 17.9867 88.7688 17.48C88.0888 16.96 87.7488 16.24 87.7488 15.32C87.7488 14.4 88.0354 13.68 88.6088 13.16C89.1821 12.64 90.0554 12.2667 91.2288 12.04L94.7688 11.34C94.7688 10.58 94.5954 10.0133 94.2488 9.64C93.9021 9.25333 93.3888 9.06 92.7088 9.06C92.0954 9.06 91.6088 9.20667 91.2488 9.5C90.9021 9.78 90.6621 10.1867 90.5288 10.72L87.9288 10.6C88.1421 9.46667 88.6621 8.6 89.4888 8C90.3154 7.38667 91.3888 7.08 92.7088 7.08C94.2288 7.08 95.3754 7.46667 96.1488 8.24C96.9354 9 97.3288 10.0933 97.3288 11.52V15.4C97.3288 15.68 97.3754 15.8733 97.4688 15.98C97.5754 16.0867 97.7288 16.14 97.9288 16.14H98.2687V18C98.1888 18.0267 98.0554 18.0467 97.8688 18.06C97.6954 18.0733 97.5154 18.08 97.3288 18.08C96.8888 18.08 96.4954 18.0133 96.1488 17.88C95.8021 17.7333 95.5354 17.4867 95.3488 17.14C95.1621 16.78 95.0688 16.2933 95.0688 15.68L95.2888 15.84C95.1821 16.3067 94.9488 16.7267 94.5888 17.1C94.2421 17.46 93.8021 17.74 93.2688 17.94C92.7354 18.14 92.1354 18.24 91.4688 18.24ZM91.9888 16.38C92.5621 16.38 93.0554 16.2667 93.4688 16.04C93.8821 15.8133 94.2021 15.5 94.4288 15.1C94.6554 14.7 94.7688 14.2267 94.7688 13.68V13.08L92.0088 13.64C91.4354 13.76 91.0221 13.94 90.7688 14.18C90.5288 14.4067 90.4088 14.7067 90.4088 15.08C90.4088 15.4933 90.5421 15.8133 90.8088 16.04C91.0888 16.2667 91.4821 16.38 91.9888 16.38ZM99.0141 18V7.32H101.574V18H99.0141ZM98.9741 5.9V3.62H101.634V5.9H98.9741Z" fill="currentColor"></path></svg>
+      </a>
+
+      <nav class="mainnav" aria-label="Primary">
+        <button class="navpill">Patient Lookup</button>
+        <button class="navpill">Encounter</button>
+        <button class="navpill">SMART App</button>
+        <button class="navpill">Media Manager</button>
+        <button class="navpill">Registration</button>
+      </nav>
+    </div>
+
+    <div class="topbar__right">
+      <div class="topbar__controls">
+        <div class="searchbox">
+          <input type="text" placeholder="Search (Ctrl+Space)" aria-label="Search" />
+        </div>
+        <button class="iconbtn" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
+        <button class="iconbtn" title="Help" aria-label="Help">?</button>
+        <button class="tutorialbtn">
+          <span class="tutorialbtn__play">▶</span>
+          <span>Tutorial</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ TAB STRIP ============ -->
+  <div class="tabstrip" role="tablist">
+    <div class="tab tab--icon" title="Messages">
+      <svg viewBox="0 0 24 24" width="20" height="16" fill="none" stroke="#1221d7" stroke-width="1.8">
+        <rect x="1.5" y="3.5" width="21" height="17" rx="2" />
+        <path d="M2 5l10 7 10-7" />
+      </svg>
+    </div>
+    <button class="tab" role="tab">ED Trackboard</button>
+    <button class="tab" role="tab">Patient List</button>
+    <button class="tab" role="tab">Schedule</button>
+    <button class="tab" role="tab">Billing &amp; Rfrls</button>
+    <button class="tab" role="tab">Rx Dispense</button>
+    <button class="tab tab--active" role="tab" aria-selected="true">
+      SMART Application
+      <span class="tab__close" title="Close tab">✕</span>
+    </button>
+
+    <div class="tabstrip__meta">
+      <div class="fhir"><span class="fhir__dot"></span>FHIR connected</div>
+      <div class="useremail">shivank@luminai.com</div>
+    </div>
+  </div>
+
+  <!-- ============ WORKSPACE ============ -->
+  <div class="workspace">
+    <!-- Left sidebar -->
+    <aside class="sidebar" aria-label="Mailbox folders">
+      <div class="sidebar__group">
+        <div class="sidebar__heading">MY MESSAGES</div>
+        <ul class="sidebar__list">
+          <li class="sidebar__item sidebar__item--active" data-folder="My Requests">
+            My Requests
+            <svg class="sidebar__item-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12h13M12 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </li>
+          <li class="sidebar__item" data-folder="Staff Messages">Staff Messages</li>
+          <li class="sidebar__item" data-folder="Results">Results</li>
+          <li class="sidebar__item" data-folder="Letter Drafts">Letter Drafts</li>
+          <li class="sidebar__item" data-folder="Forms &amp; Approvals">Forms &amp; Approvals</li>
+          <li class="sidebar__item" data-folder="My Incomplete Notes" title="My Incomplete Notes">My Incomplete No…</li>
+          <li class="sidebar__item" data-folder="New Charts">New Charts</li>
+          <li class="sidebar__item" data-folder="Search">Search</li>
+        </ul>
+      </div>
+
+      <div class="sidebar__group">
+        <div class="sidebar__heading">ACTIVITY</div>
+        <ul class="sidebar__list">
+          <li class="sidebar__item" data-folder="Follow-up">Follow-up</li>
+          <li class="sidebar__item" data-folder="All Flagged">All Flagged</li>
+          <li class="sidebar__item" data-folder="Patient Messages">Patient Messages</li>
+        </ul>
+      </div>
+
+      <div class="sidebar__group sidebar__group--loose">
+        <ul class="sidebar__list">
+          <li class="sidebar__item" data-folder="Sent Messages">Sent Messages</li>
+          <li class="sidebar__item" data-folder="Completed Work">Completed Work</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Message list -->
+    <section class="msglist" aria-label="Message list">
+      <div class="msglist__header">
+        <span class="msglist__count">2 Messages</span>
+        <div class="msglist__actions">
+          <button class="msglist__action"><span class="refresh-glyph">↻</span> Refresh</button>
+          <button class="msglist__action">Filter</button>
+        </div>
+      </div>
+
+      <!-- Rendered by script.js from the MESSAGES data model -->
+      <ul class="msglist__items" id="msgItems"></ul>
+
+    </section>
+
+    <!-- Reading pane -->
+    <section class="reader" id="reader" aria-label="Reading pane">
+      <div class="reader__empty" id="readerEmpty">
+        <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#c9ccd1" stroke-width="1.2" aria-hidden="true">
+          <rect x="1.5" y="3.5" width="21" height="17" rx="2" />
+          <path d="M2 5l10 7 10-7" />
+        </svg>
+        <p>Select a message to read it</p>
+      </div>
+
+      <article class="reader__content" id="readerContent" hidden>
+        <header class="reader__head">
+          <h1 class="reader__subject" id="rSubject"></h1>
+          <div class="reader__metarow">
+            <span class="reader__from" id="rFrom"></span>
+            <span class="reader__time" id="rTime"></span>
+          </div>
+          <div class="reader__source" id="rSource"></div>
+        </header>
+        <div class="reader__body" id="rBody"></div>
+        <div class="reader__actions" id="rActions"></div>
+      </article>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
