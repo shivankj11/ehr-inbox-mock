@@ -515,16 +515,32 @@ const PATIENT_NAMES = {
   '0337ce1a-4012-7e62-99dc-2547d449bef7': 'Bechtelar, Rhett James',
 };
 
+// send_inbasket.py --target shivank writes the body as a JSON document so the
+// real patient travels per-message. Parse it here; plain-text bodies (older rows
+// or Farseen-style sends) return null and are handled as raw text.
+function parseBodyDoc(body) {
+  if (typeof body !== 'string') return null;
+  const t = body.trim();
+  if (!t.startsWith('{')) return null;
+  try { return JSON.parse(t); } catch { return null; }
+}
+
 // Map an inbasket_messages row (the SENDMESSAGE shape) to the UI's fields.
 // Primary line = patient name (orange); second line = sender; third = subject.
 function mapRow(r) {
-  const body = r.body || '';
-  const first = body.split('\n')[0] || 'In Basket message';
+  const doc = parseBodyDoc(r.body);
+  const message = doc && typeof doc.message === 'string' ? doc.message : (r.body || '');
+  const first = message.split('\n')[0] || 'In Basket message';
+  const name = (doc && doc.patient_name)
+    || r.patient_name
+    || PATIENT_NAMES[r.patient_id]
+    || r.sender_id
+    || 'In Basket';
   return {
-    from: r.patient_name || PATIENT_NAMES[r.patient_id] || r.sender_id || 'In Basket',
+    from: name,
     subject: first.length > 90 ? first.slice(0, 90) + '…' : first,
     source: r.sender_id || 'In Basket',
-    body,
+    body: message,
     folder: MSG_TYPE_TO_FOLDER[r.message_type] || 'Staff Messages',
     flagged: false,
     time: r.created_at ? fmt(new Date(r.created_at)) : undefined,
