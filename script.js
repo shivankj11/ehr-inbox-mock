@@ -143,8 +143,21 @@ function openMessage(id) {
   els.actionsEmpty.hidden = true;
   els.empty.hidden = true;
   els.content.hidden = false;
+  selectReaderTab('Message'); // always land on the message when opening
   renderList(); // refresh active-row highlight
 }
+
+// ---- reader sub-tabs: Message / Meds / Vitals / Labs / SMART App ----
+function selectReaderTab(name) {
+  document.querySelectorAll('.reader__tab').forEach((t) =>
+    t.classList.toggle('reader__tab--active', t.dataset.tab === name));
+  document.querySelectorAll('.reader__panel').forEach((p) => {
+    p.hidden = p.dataset.panel !== name;
+  });
+}
+document.querySelectorAll('.reader__tab').forEach((t) => {
+  t.addEventListener('click', () => selectReaderTab(t.dataset.tab));
+});
 
 // ---- action menu: resolved messages get Reactivate; active ones get Done/Complete/Reject ----
 const TERMINAL_FOLDERS = ['Completed Work', 'Sent Messages'];
@@ -415,13 +428,20 @@ const MSG_TYPE_TO_FOLDER = {
   'follow-up': 'Follow-up',
 };
 
+// Known sample patients (patient_id -> display name). Real names arrive via r.patient_name.
+const PATIENT_NAMES = {
+  '0337ce1a-4012-7e62-99dc-2547d449bef7': 'Bechtelar, Rhett James',
+};
+
 // Map an inbasket_messages row (the SENDMESSAGE shape) to the UI's fields.
+// Primary line = patient name (orange); second line = sender; third = subject.
 function mapRow(r) {
   const body = r.body || '';
+  const first = body.split('\n')[0] || 'In Basket message';
   return {
-    from: r.sender_id || 'In Basket',
-    subject: (body.split('\n')[0] || 'In Basket message').slice(0, 90),
-    source: r.patient_id ? `PatientID ${r.patient_id}` : 'In Basket (API)',
+    from: r.patient_name || PATIENT_NAMES[r.patient_id] || r.sender_id || 'In Basket',
+    subject: first.length > 90 ? first.slice(0, 90) + '…' : first,
+    source: r.sender_id || 'In Basket',
     body,
     folder: MSG_TYPE_TO_FOLDER[r.message_type] || 'Staff Messages',
     flagged: false,

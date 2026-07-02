@@ -174,7 +174,8 @@
           <button class="reader__tab" data-tab="SMART App">SMART App</button>
         </nav>
 
-        <div class="reader__cards">
+        <!-- Message tab -->
+        <div class="reader__panel reader__cards" data-panel="Message">
           <div class="card">
             <div class="card__head" id="rSubject"></div>
             <div class="card__body">
@@ -191,7 +192,83 @@
               <div class="card__text" id="rBody"></div>
             </div>
           </div>
+        </div>
 
+        <!-- Meds tab (sample data) -->
+        <div class="reader__panel reader__cards" data-panel="Meds" hidden>
+          <section class="clin">
+            <h3 class="clin__heading">Active Medications</h3>
+            <table class="clintable">
+              <thead>
+                <tr><th>Medication</th><th>Dose</th><th>Route</th><th>Freq</th><th>Prescriber</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>metFORMIN</td><td>500 mg</td><td>PO</td><td>BID</td><td>Evans, R.</td></tr>
+                <tr><td>lisinopril</td><td>10 mg</td><td>PO</td><td>Daily</td><td>Evans, R.</td></tr>
+                <tr><td>atorvastatin</td><td>40 mg</td><td>PO</td><td>QPM</td><td>Evans, R.</td></tr>
+                <tr><td>empagliflozin</td><td>10 mg</td><td>PO</td><td>Daily</td><td>Evans, R.</td></tr>
+                <tr><td>aspirin</td><td>81 mg</td><td>PO</td><td>Daily</td><td>Evans, R.</td></tr>
+                <tr><td>levothyroxine</td><td>125 mcg</td><td>PO</td><td>QAM</td><td>Evans, R.</td></tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="clin">
+            <h3 class="clin__heading">Allergies</h3>
+            <table class="clintable">
+              <thead>
+                <tr><th>Allergen</th><th>Reaction</th><th>Severity</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Penicillin</td><td>Rash, urticaria</td><td><span class="badge badge--warn">Moderate</span></td></tr>
+                <tr><td>Sulfa drugs</td><td>Anaphylaxis</td><td><span class="badge badge--crit">Severe</span></td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <!-- Vitals tab (sample data) -->
+        <div class="reader__panel reader__cards" data-panel="Vitals" hidden>
+          <section class="clin">
+            <h3 class="clin__heading">Recent Vital Signs</h3>
+            <table class="clintable">
+              <thead>
+                <tr><th>Date / Time</th><th>BP</th><th>HR</th><th>RR</th><th>Temp</th><th>SpO2</th><th>Wt</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>06/27 09:15</td><td><strong>158/96</strong></td><td>82</td><td>16</td><td>98.4°F</td><td>98%</td><td>214 lb</td></tr>
+                <tr><td>06/24 14:30</td><td><strong>152/92</strong></td><td>78</td><td>14</td><td>98.2°F</td><td>98%</td><td>215 lb</td></tr>
+                <tr><td>06/20 10:00</td><td>144/88</td><td>76</td><td>15</td><td>98.6°F</td><td>99%</td><td>216 lb</td></tr>
+                <tr><td>06/13 09:45</td><td>148/90</td><td>80</td><td>16</td><td>98.5°F</td><td>98%</td><td>215 lb</td></tr>
+                <tr><td>06/05 11:20</td><td>140/86</td><td>74</td><td>14</td><td>98.3°F</td><td>99%</td><td>217 lb</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <!-- Labs tab (sample data) -->
+        <div class="reader__panel reader__cards" data-panel="Labs" hidden>
+          <section class="clin">
+            <h3 class="clin__heading">Recent Results</h3>
+            <table class="clintable">
+              <thead>
+                <tr><th>Test</th><th>Result</th><th>Reference</th><th>Status</th><th>Date</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>HbA1c</td><td><strong>8.4%</strong></td><td>4.0–5.6%</td><td><span class="badge badge--warn">High</span></td><td>06/27</td></tr>
+                <tr><td>Glucose (fasting)</td><td><strong>148 mg/dL</strong></td><td>70–99</td><td><span class="badge badge--warn">High</span></td><td>06/27</td></tr>
+                <tr><td>Creatinine</td><td>0.9 mg/dL</td><td>0.6–1.2</td><td><strong>Normal</strong></td><td>06/27</td></tr>
+                <tr><td>eGFR</td><td>72 mL/min</td><td>&gt;60</td><td><strong>Normal</strong></td><td>06/27</td></tr>
+                <tr><td>LDL</td><td><strong>148 mg/dL</strong></td><td>&lt;100</td><td><span class="badge badge--warn">High</span></td><td>06/24</td></tr>
+                <tr><td>TSH</td><td><strong>0.08 mIU/L</strong></td><td>0.40–4.50</td><td><span class="badge badge--crit">Crit Low</span></td><td>06/24</td></tr>
+                <tr><td>Hemoglobin</td><td><strong>11.2 g/dL</strong></td><td>12.0–17.5</td><td><span class="badge badge--warn">Low</span></td><td>06/20</td></tr>
+                <tr><td>Potassium</td><td>4.1 mEq/L</td><td>3.5–5.1</td><td><strong>Normal</strong></td><td>06/20</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <!-- SMART App tab -->
+        <div class="reader__panel reader__cards" data-panel="SMART App" hidden>
           <div class="card">
             <div class="card__head">SMART Application</div>
             <div class="card__body">
