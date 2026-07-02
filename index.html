@@ -48,18 +48,18 @@
 
   <!-- ============ TAB STRIP ============ -->
   <div class="tabstrip" role="tablist">
-    <div class="tab tab--icon" title="Messages">
+    <div class="tab tab--icon tab--active" role="tab" aria-selected="true" title="Inbox — Home">
       <svg viewBox="0 0 24 24" width="20" height="16" fill="none" stroke="#1221d7" stroke-width="1.8">
         <rect x="1.5" y="3.5" width="21" height="17" rx="2" />
         <path d="M2 5l10 7 10-7" />
       </svg>
     </div>
     <button class="tab" role="tab">ED Trackboard</button>
-    <button class="tab" role="tab">Patient List</button>
-    <button class="tab" role="tab">Schedule</button>
-    <button class="tab" role="tab">Billing &amp; Rfrls</button>
-    <button class="tab" role="tab">Rx Dispense</button>
-    <button class="tab tab--active" role="tab" aria-selected="true">
+    <button class="tab tab--disabled" aria-disabled="true">Patient List</button>
+    <button class="tab tab--disabled" aria-disabled="true">Schedule</button>
+    <button class="tab tab--disabled" aria-disabled="true">Billing &amp; Rfrls</button>
+    <button class="tab tab--disabled" aria-disabled="true">Rx Dispense</button>
+    <button class="tab tab--disabled" aria-disabled="true">
       SMART Application
       <span class="tab__close" title="Close tab">✕</span>
     </button>
@@ -280,6 +280,48 @@
       </div>
     </section>
   </div>
+
+  <!-- ============ ED TRACK BOARD (patient list) ============ -->
+  <section class="trackboard" id="trackboard" hidden aria-label="ED Track Board">
+    <div class="trackboard__bar">
+      <h1 class="trackboard__title">ED Track Board</h1>
+      <div class="trackboard__toolbar">
+        <button class="tb-tool">+ Add Patient</button>
+        <button class="tb-tool">↻ Refresh</button>
+        <button class="tb-tool">+ Expect Tmp Pt</button>
+        <button class="tb-tool">📝 Provider Note</button>
+        <button class="tb-tool">📋 Orders</button>
+        <button class="tb-tool">📄 Dispo</button>
+        <button class="tb-tool">👤 Sign Out</button>
+        <button class="tb-tool">📅 Edit Shifts</button>
+        <button class="tb-tool">👥 Tx Team</button>
+        <button class="tb-tool">🔧 Add'l Tools</button>
+      </div>
+    </div>
+    <div class="trackboard__filters">
+      <button class="tb-filter tb-filter--active">All Patients (58)</button>
+      <button class="tb-filter">My Patients (0)</button>
+      <button class="tb-filter">Expected (1)</button>
+      <button class="tb-filter">My + Unassigned (19)</button>
+      <button class="tb-filter">Finish Up Fast (20)</button>
+      <button class="tb-filter">Consults (6)</button>
+      <button class="tb-filter">To Be Admitted (8)</button>
+      <button class="tb-filter">Waiting for Provider (2)</button>
+      <button class="tb-filter">Waiting (17)</button>
+      <button class="tb-filter">A Team A (12)</button>
+      <button class="tb-filter">B Team B (6)</button>
+      <button class="tb-filter">C Team C (3)</button>
+      <button class="tb-filter">Team B/C (9)</button>
+      <button class="tb-filter">D Team D (6)</button>
+      <button class="tb-filter">Peds (5)</button>
+      <button class="tb-filter">BHED (3)</button>
+      <button class="tb-filter">GNSH (1)</button>
+      <button class="tb-filter">Prov Triage+WR (17)</button>
+    </div>
+    <div class="trackboard__tablewrap">
+      <table class="edtable" id="edTable"></table>
+    </div>
+  </section>
 
   <script src="script.js"></script>
 </body>

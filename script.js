@@ -242,15 +242,97 @@ document.querySelectorAll('.sidebar__item').forEach((f) => {
   });
 });
 
-// ---- tab selection (visual only) ----
+// ---- top tab selection: swap between the inbox (SMART Application) and the ED Track Board ----
 const tabs = document.querySelectorAll('.tabstrip .tab[role="tab"]');
+const workspaceView = document.querySelector('.workspace');
+const trackboardView = document.getElementById('trackboard');
 tabs.forEach((t) => {
   t.addEventListener('click', (e) => {
     if (e.target.classList.contains('tab__close')) return;
     tabs.forEach((x) => { x.classList.remove('tab--active'); x.removeAttribute('aria-selected'); });
     t.classList.add('tab--active');
     t.setAttribute('aria-selected', 'true');
+    const showBoard = /ED Trackboard/i.test(t.textContent);
+    if (trackboardView) trackboardView.hidden = !showBoard;
+    if (workspaceView) workspaceView.hidden = showBoard;
   });
+});
+
+// ============================================================================
+// ED Track Board — patient list shown when the "ED Trackboard" tab is active.
+// Sample roster; most Epic columns are intentionally blank (as on a real board).
+// ============================================================================
+const ED_COLS = [
+  'Bed', 'OOB', 'Vis', 'Acu', 'TT', 'Patient', 'Age', 'Complaint', 'SMART App',
+  'PV', '<30d', 'MD/LIP', 'Res', 'RN', 'New Data', 'Lab Stat', 'Img Stat', 'Radi',
+  'Co-S', 'Con', 'Stick', 'Falls', 'BH', 'Mec', 'Dispo', 'Bed', 'Reg', 'Pwc',
+];
+
+const ED_PATIENTS = [
+  { bed: '07-P', tt: '2819…', name: 'Anderson, Linda',   sex: 'U', age: 77, smart: 'Low',  res: 'SJP', newData: '1/2/2', lab: '1/9' },
+  { bed: '08-P', tt: 'bef7…', name: 'Bechtelar, Rhett',  sex: 'M', age: 33, smart: 'Low',  res: 'SJP', newData: '0/3/3', lab: '0/6' },
+  { bed: '09-P', tt: 'e694…', name: 'Becker, Lashandra', sex: 'F', age: 64, smart: 'Low',  res: 'SJP', newData: '1/4/0', lab: '1/4' },
+  { bed: '10-P', tt: 'fd31…', name: 'Bernier, Antione',  sex: 'M', age: 10, smart: 'Med',  res: 'SJP', newData: '1/3/3', lab: '0/7' },
+  { bed: '11-P', tt: 'b336…', name: 'Bernier, Tracey',   sex: 'F', age: 59, smart: 'Low',  res: 'SJP', newData: '0/3/0', lab: '1/2' },
+  { bed: '12-P', tt: '3216…', name: 'Blick, Saul',       sex: 'M', age: 15, smart: 'Low',  res: 'SJP', newData: '4/4/3', lab: '0/0' },
+  { bed: '13-P', tt: '034e…', name: 'Borer, Elaine',     sex: 'F', age: 14, smart: 'Med',  res: 'SJP', newData: '1/1/1', lab: '2/2' },
+  { bed: '14-P', tt: 'd8ac…', name: 'Bradtke, Loise',    sex: 'F', age: 10, smart: 'High', res: 'SJP', newData: '0/0/3', lab: '0/5' },
+  { bed: '15-P', tt: 'fa95…', name: 'Braun, Rufus',      sex: 'M', age: 67, smart: 'Low',  res: 'SJP', newData: '0/3/2', lab: '2/7' },
+  { bed: '16-P', tt: 'LASS…', name: 'BREAKTHEGLASS, BREAKTHEGLASS', sex: 'F', age: 43, smart: 'Low', res: 'SJP', newData: '0/4/3', lab: '2/8' },
+  { bed: '17-P', tt: '046f…', name: 'Brown, Yevette',    sex: 'F', age: 68, smart: 'Med',  res: 'SJP', newData: '0/0/4', lab: '0/3' },
+  { bed: '18-P', tt: 'EVEL…', name: 'BTGAPPTLEVEL, BTGAPPTLEVEL', sex: 'M', age: 25, smart: 'Med', res: 'SJP', newData: '2/1/3', lab: '2/3' },
+];
+
+const BED_ICON = '<svg class="ed-bed__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6v12"/><path d="M2 12h16a4 4 0 0 1 4 4v2"/><path d="M22 18H2"/><path d="M6 12V9h4a2 2 0 0 1 2 2v1"/></svg>';
+const DISCH_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7"/><path d="M5 9v11h14V9"/></svg>';
+
+// idx distinguishes the two "Bed" columns — only the first carries the bed/number.
+function edCell(col, p, idx) {
+  switch (col) {
+    case 'Bed':       return idx === 0 ? `<span class="ed-bed">${BED_ICON}${p.bed}</span>` : '';
+    case 'TT':        return `<span class="ed-tt">${p.tt}</span>`;
+    case 'Patient':   return `<span class="ed-name">${p.name} (${p.sex})</span>`;
+    case 'Age':       return `${p.age} y.o.`;
+    case 'Complaint': return '<span class="ed-link">See chart</span>';
+    case 'SMART App': return `<span class="ed-pill ed-pill--${p.smart.toLowerCase()}">${p.smart}</span>`;
+    case 'Res':       return `<span class="ed-res">${p.res}</span>`;
+    case 'New Data':  return `<span class="ed-nums">[${p.newData}]</span>`;
+    case 'Lab Stat':  return `<span class="ed-nums">[${p.lab}]</span>`;
+    case 'Dispo':     return `<span class="ed-dispo">${DISCH_ICON}Disch…</span>`;
+    case 'Pwc':       return `<button class="ed-x" data-bed="${p.bed}" title="Remove">✕</button>`;
+    default:          return '';
+  }
+}
+
+function renderTrackboard() {
+  const table = document.getElementById('edTable');
+  if (!table) return;
+  const head = `<thead><tr>${ED_COLS.map((c) => `<th>${c}</th>`).join('')}</tr></thead>`;
+  const body = `<tbody>${ED_PATIENTS.map((p) =>
+    `<tr>${ED_COLS.map((c, i) => `<td>${edCell(c, p, i)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  table.innerHTML = head + body;
+  table.querySelectorAll('.ed-x').forEach((b) => {
+    b.addEventListener('click', () => {
+      const i = ED_PATIENTS.findIndex((p) => p.bed === b.dataset.bed);
+      if (i > -1) { ED_PATIENTS.splice(i, 1); renderTrackboard(); }
+    });
+  });
+}
+renderTrackboard();
+
+// filter chips: move the active highlight (visual only for this mock)
+document.querySelectorAll('.tb-filter').forEach((f) => {
+  f.addEventListener('click', () => {
+    document.querySelectorAll('.tb-filter').forEach((x) => x.classList.remove('tb-filter--active'));
+    f.classList.add('tb-filter--active');
+  });
+});
+
+// toolbar Refresh re-renders the board
+document.querySelectorAll('.tb-tool').forEach((b) => {
+  if (/Refresh/.test(b.textContent)) {
+    b.addEventListener('click', () => { renderTrackboard(); toast('Track board refreshed'); });
+  }
 });
 
 // ---- "Refresh" spins briefly (visible feedback), then full-reloads → re-pulls Supabase ----

@@ -233,6 +233,19 @@ body {
 }
 .tab__close:hover { color: var(--text); }
 
+/* disabled tabs: look normal, but non-interactive */
+.tab--disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* mail icon acts as the "home inbox" tab; keep its accent look when active */
+.tab--icon.tab--active {
+  background: var(--accent-tint);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+}
+
 /* ================= WORKSPACE ================= */
 .workspace {
   flex: 1 1 auto;
@@ -583,3 +596,116 @@ body.col-resizing { cursor: col-resize; user-select: none; }
   .msglist { border-bottom: 1px solid var(--border); max-height: 34vh; }
   .actions-pane { border-bottom: 1px solid var(--border); }
 }
+
+/* ============ ED Track Board (patient list) ============ */
+.trackboard {
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.trackboard__bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 14px 20px 4px;
+  flex-wrap: wrap;
+}
+.trackboard__title { margin: 0; font-size: 1.4rem; font-weight: 700; color: #111827; }
+.trackboard__toolbar { display: flex; gap: 20px; flex-wrap: wrap; }
+.tb-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #374151;
+  padding: 4px 0;
+}
+.tb-tool:hover { color: var(--accent); }
+.trackboard__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 2px;
+  padding: 6px 14px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.tb-filter {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.tb-filter:hover { background: #f1f2f4; color: var(--text); }
+.tb-filter--active { background: var(--accent); color: #fff; font-weight: 600; }
+.trackboard__tablewrap { flex: 1 1 auto; min-height: 0; overflow: auto; }
+
+.edtable { border-collapse: collapse; white-space: nowrap; font-size: 0.9rem; width: 100%; }
+.edtable th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f3f4f6;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 1px solid var(--border);
+}
+.edtable td {
+  padding: 9px 12px;
+  color: var(--text);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+}
+.edtable tbody tr:hover { background: #f7f8f9; }
+
+.ed-bed { display: inline-flex; align-items: center; gap: 6px; color: #374151; }
+.ed-bed__icon { color: var(--text-muted); flex: none; }
+.ed-tt { color: var(--text-muted); }
+.ed-name { font-weight: 700; color: #111827; }
+.ed-link { color: var(--link-navy); cursor: pointer; }
+.ed-link:hover { text-decoration: underline; }
+.ed-nums { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.ed-res {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #e6f4ea;
+  color: #137a3f;
+}
+.ed-dispo { display: inline-flex; align-items: center; gap: 6px; color: var(--lum-amber-600); }
+.ed-pill {
+  display: inline-block;
+  min-width: 46px;
+  text-align: center;
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+.ed-pill--low  { background: #17a34a; }
+.ed-pill--med  { background: #ef9d1a; }
+.ed-pill--high { background: #e0483c; }
+.ed-x {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #9aa0a8;
+  font-size: 0.95rem;
+  padding: 0 4px;
+  line-height: 1;
+}
+.ed-x:hover { color: #e0483c; }
